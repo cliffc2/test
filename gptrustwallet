@@ -1,0 +1,77 @@
+// Import necessary libraries
+use std::collections::HashMap;
+
+// Define the Wallet struct
+// Stores the public and private keys for the wallet as well as the balance
+struct Wallet {
+    pub_key: String,
+    priv_key: String,
+    balance: u64,
+}
+
+// Define the KaspaWallet struct
+// Stores the wallets and allows for wallet creation, deletion, and retrieval
+struct KaspaWallet {
+    wallets: HashMap<String, Wallet>,
+}
+
+impl KaspaWallet {
+    // Create a new empty KaspaWallet
+    fn new() -> Self {
+        KaspaWallet {
+            wallets: HashMap::new(),
+        }
+    }
+
+    // Create a new Wallet and add it to the KaspaWallet
+    fn create_wallet(&mut self) -> &Wallet {
+        // Generate a new public and private key pair
+        let pub_key = generate_key();
+        let priv_key = generate_key();
+
+        // Create a new Wallet with a balance of 0
+        let wallet = Wallet {
+            pub_key,
+            priv_key,
+            balance: 0,
+        };
+
+        // Save the wallet in the KaspaWallet
+        self.wallets.insert(pub_key.clone(), wallet);
+
+        // Return a reference to the new Wallet
+        self.wallets.get(&pub_key).unwrap()
+    }
+
+    // Delete a Wallet from the KaspaWallet
+    fn delete_wallet(&mut self, pub_key: &str) {
+        self.wallets.remove(pub_key);
+    }
+
+    // Retrieve a Wallet from the KaspaWallet
+    fn get_wallet(&self, pub_key: &str) -> Option<&Wallet> {
+        self.wallets.get(pub_key)
+    }
+}
+
+// Function to generate a random key
+fn generate_key() -> String {
+    // Implementation omitted for brevity
+    unimplemented!();
+}
+
+// Example usage
+fn main() {
+    let mut wallet = KaspaWallet::new();
+    let wallet1 = wallet.create_wallet();
+    let wallet2 = wallet.create_wallet();
+    let wallet3 = wallet.create_wallet();
+
+    println!("Wallet 1: {:?}", wallet.get_wallet(wallet1.pub_key));
+    println!("Wallet 2: {:?}", wallet.get_wallet(wallet2.pub_key));
+    println!("Wallet 3: {:?}", wallet.get_wallet(wallet3.pub_key));
+
+    wallet.delete_wallet(wallet2.pub_key);
+
+    println!("Wallet 1: {:?}", wallet.get_wallet(wallet1.pub_key));
+    println!("Wallet 2
